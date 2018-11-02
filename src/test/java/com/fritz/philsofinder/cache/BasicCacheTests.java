@@ -2,6 +2,7 @@ package com.fritz.philsofinder.cache;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,14 @@ public class BasicCacheTests {
 		PathResponse cacheResponse = cache.get(key);
 		
 		assertNull(cacheResponse);
+	}
+	
+	@Test
+	public void testCacheContainsEntry() {
+		CacheKey key = new CacheKey("start","end"); 
+		PathResponse path = new PathResponse("start","end", "start -> end", 1);
+		cache.put(key, path);
+		assertTrue(cache.contains(key));
 	}
 
 }

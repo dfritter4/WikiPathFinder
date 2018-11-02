@@ -22,7 +22,7 @@ import com.fritz.philsofinder.service.WikiPathFindingService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class PhilosoFinderControllerTests {
+public class WikiPathFinderControllerTests {
 	
 	@Mock
 	private WikiPathFindingService service;

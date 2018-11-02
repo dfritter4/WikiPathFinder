@@ -56,14 +56,4 @@ public class PathResponse {
 	public Integer getHopsOnPath() { return this.hopsOnPath; }
 	public Boolean isPathExists() { return this.hopsOnPath != -1; }
 
-	@Override
-	public String toString() {
-		return "FoundPath [startingPage=" + startingPage 
-				+ ", destinationPage=" + destinationPage 
-				+ ", pathToDestination=" + pathToDestination 
-				+ ", foundOnDate=" + foundOnDate
-				+ ", hopsOnPath=" + hopsOnPath
-				+ "]";
-	}
-
 }

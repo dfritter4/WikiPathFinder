@@ -6,6 +6,9 @@ public class CacheKey {
 	private final String endPage;
 	
 	public CacheKey(String startPage, String endPage) {
+		if(startPage == null || endPage == null) {
+			throw new IllegalArgumentException("Start and end page must not be null");
+		}
 		this.startPage = startPage;
 		this.endPage = endPage;
 	}
@@ -36,15 +39,9 @@ public class CacheKey {
 		if (getClass() != obj.getClass())
 			return false;
 		CacheKey other = (CacheKey) obj;
-		if (endPage == null) {
-			if (other.endPage != null)
-				return false;
-		} else if (!endPage.equals(other.endPage))
+		if(!endPage.equals(other.endPage))
 			return false;
-		if (startPage == null) {
-			if (other.startPage != null)
-				return false;
-		} else if (!startPage.equals(other.startPage))
+		if (!startPage.equals(other.startPage))
 			return false;
 		return true;
 	}
