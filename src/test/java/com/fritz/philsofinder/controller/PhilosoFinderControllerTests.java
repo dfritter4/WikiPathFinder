@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fritz.philsofinder.controller.impl.PhilosoFinderControllerImpl;
+import com.fritz.philsofinder.controller.impl.WikiPathFinderControllerImpl;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.service.WikiPathFindingService;
 
@@ -28,7 +28,7 @@ public class PhilosoFinderControllerTests {
 	private WikiPathFindingService service;
 	
 	@InjectMocks
-	private PhilosoFinderControllerImpl controller;
+	private WikiPathFinderControllerImpl controller;
 	
 	@Before
     public void init(){

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fritz.philsofinder.controller.PhilosoFinderController;
+import com.fritz.philsofinder.controller.WikiPathFinderController;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.service.WikiPathFindingService;
 
 @CrossOrigin("*")
 @RequestMapping("/api")
 @RestController
-public class PhilosoFinderControllerImpl implements PhilosoFinderController {
+public class WikiPathFinderControllerImpl implements WikiPathFinderController {
 
 	@Autowired
 	private WikiPathFindingService service;
