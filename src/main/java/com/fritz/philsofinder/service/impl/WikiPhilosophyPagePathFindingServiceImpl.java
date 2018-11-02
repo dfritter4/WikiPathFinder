@@ -34,13 +34,13 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 		Document startPageDoc = JsoupUtilities.connectAndGetPage(startPageUrl);
 		String startPageName = JsoupUtilities.getPageName(startPageDoc);
 		
-		PathResponse foundPath = getFromCacheOrRepo(new CacheKey(startPageName, destinationPageName));
+		PathResponse foundPath = getFromCacheOrRepo(startPageName, destinationPageName);
 		
 		if(null != foundPath) {
 			return foundPath;
 		}
 		
-		foundPath = findPathToPhiloPage(startPageName, destinationPageName, startPageDoc);
+		foundPath = findPathToDestinationPage(startPageName, destinationPageName, startPageDoc);
 		
 		addToCacheAndRepo(foundPath);
 		
@@ -53,16 +53,17 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 		repo.save(foundPath);
 	}
 	
-	private PathResponse getFromCacheOrRepo(CacheKey key) {
+	private PathResponse getFromCacheOrRepo(String startPageName, String destinationPageName) {
+		CacheKey key = new CacheKey(startPageName, destinationPageName);
 		if(cache.contains(key)) {
 			return cache.get(key);
 		}
 		
-		return repo.findByStartingPageAndDestinationPage(key.getStartPage(), key.getEndPage());
+		return repo.findByStartingPageAndDestinationPage(startPageName, destinationPageName);
 	}
 	
 	//primary path finding algorithm
-	private PathResponse findPathToPhiloPage(String startPageName, String destinationPageName, Document startPageDoc) {
+	private PathResponse findPathToDestinationPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
 		Integer hops = 0;
 		String nextPageName = "";
