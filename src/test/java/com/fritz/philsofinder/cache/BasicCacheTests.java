@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +24,7 @@ public class BasicCacheTests {
 	@Test
 	public void testRetreiveCacheWithEntry() {
 		CacheKey key = new CacheKey("start","end"); 
-		PathResponse path = new PathResponse("start","end", "start -> end", 1);
+		PathResponse path = new PathResponse("start","end", Arrays.asList("start", ""));
 		cache.put(key, path);
 		
 		PathResponse cacheResponse = cache.get(key);
@@ -40,7 +42,7 @@ public class BasicCacheTests {
 	@Test
 	public void testCacheContainsEntry() {
 		CacheKey key = new CacheKey("start","end"); 
-		PathResponse path = new PathResponse("start","end", "start -> end", 1);
+		PathResponse path = new PathResponse("start","end", Arrays.asList("start", ""));
 		cache.put(key, path);
 		assertTrue(cache.contains(key));
 	}

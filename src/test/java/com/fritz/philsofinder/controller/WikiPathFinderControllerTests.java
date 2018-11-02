@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +39,7 @@ public class WikiPathFinderControllerTests {
 	
 	@Test
 	public void testControllerPathExists() {
-		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start", "end", "path -> Philsophy", 1));
+		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start","end", Arrays.asList("start", "")));
 		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
 		assertTrue(response.getBody().isPathExists());

@@ -1,8 +1,8 @@
 package com.fritz.philsofinder.service.impl;
 
 import java.util.AbstractSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -85,21 +85,8 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 			hops++;
 		}
 		
-		String path = buildPathString(pathSet);
-		return new PathResponse(startPageName, destinationPageName, path, hops);
+		return new PathResponse(startPageName, destinationPageName, new LinkedList<String>(pathSet));
 		
-	}
-	
-	private String buildPathString(AbstractSet<String> pathSet) {
-		StringBuilder path = new StringBuilder();
-		Iterator<String> pathIter = pathSet.iterator();
-		while(pathIter.hasNext()) {
-			path.append(pathIter.next());
-			if(pathIter.hasNext()) {
-				path.append(" -> ");
-			}
-		}
-		return path.toString();
 	}
 
 }

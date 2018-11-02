@@ -1,6 +1,9 @@
 package com.fritz.philsofinder.domain;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -18,15 +21,13 @@ public class PathResponse {
 	@Indexed
 	private String destinationPage;
 	
-	private String pathToDestination;
-	private Integer hopsOnPath;
+	private List<String> hopsAlongDestination;
 	private Date foundOnDate;
 	
-	public PathResponse(String startingPage, String destinationPage, String pathToDestination, Integer hopsOnPath) {
+	public PathResponse(String startingPage, String destinationPage, List<String> hopsAlongDestination) {
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
-		this.pathToDestination = pathToDestination;
-		this.hopsOnPath = hopsOnPath;
+		this.hopsAlongDestination = hopsAlongDestination;
 		this.foundOnDate = new Date();
 	}
 	
@@ -44,16 +45,25 @@ public class PathResponse {
 	public PathResponse(String startingPage, String destinationPage) {
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
-		this.pathToDestination = "";
-		this.hopsOnPath = -1;
+		this.hopsAlongDestination = Collections.emptyList();
 		this.foundOnDate = new Date();
 	}
 	
 	public String getStartingPage() { return this.startingPage; }
 	public String getDestinationPage() { return this.destinationPage; }
-	public String getPathToDestination() { return this.pathToDestination; }
 	public Date getFoundOnDate() { return this.foundOnDate; }
-	public Integer getHopsOnPath() { return this.hopsOnPath; }
-	public Boolean isPathExists() { return this.hopsOnPath != -1; }
+	public Integer getHopsOnPath() { return this.hopsAlongDestination.size()-1; }
+	public Boolean isPathExists() { return !this.hopsAlongDestination.isEmpty(); }
+	
+	public String buildPathString() {
+		StringBuilder path = new StringBuilder();
+		for(Iterator<String> pathItr = this.hopsAlongDestination.iterator(); pathItr.hasNext();) {
+			path.append(pathItr.next());
+			if(pathItr.hasNext()) {
+				path.append(" -> ");
+			}
+		}
+		return path.toString();
+	}
 
 }

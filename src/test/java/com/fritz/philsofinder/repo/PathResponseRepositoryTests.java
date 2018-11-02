@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +29,7 @@ public class PathResponseRepositoryTests {
 		repo.deleteAll();
 		repo.save(new PathResponse("start1", "end1"));
 		repo.save(new PathResponse("start2", "end2"));
-		repo.save(new PathResponse("start3", "end3", "start3 -> hop1 -> hop2 -> end3", 3));
+		repo.save(new PathResponse("start3", "end3", Arrays.asList("start3", "hop1", "hop2", "end3")));
 	}
 	
 	@After
@@ -60,7 +62,7 @@ public class PathResponseRepositoryTests {
 		assertEquals("start3", response.getStartingPage());
 		assertEquals("end3", response.getDestinationPage());
 		assertTrue(response.isPathExists());
-		assertEquals("start3 -> hop1 -> hop2 -> end3", response.getPathToDestination());
+		assertEquals("start3 -> hop1 -> hop2 -> end3", response.buildPathString());
 		assertEquals(new Integer(3), response.getHopsOnPath());
 	}
 	
