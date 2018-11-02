@@ -1,4 +1,4 @@
-package com.fritz.philsofinder.utli;
+package com.fritz.philsofinder.util;
 
 import static org.junit.Assert.assertEquals;
 

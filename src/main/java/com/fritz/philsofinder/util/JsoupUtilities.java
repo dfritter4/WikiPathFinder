@@ -18,7 +18,7 @@ public class JsoupUtilities {
 		Document startPage = null;
 		
 		try {
-			 startPage = Jsoup.connect(pageUrl).get();
+			startPage = Jsoup.connect(pageUrl).get();
 		} catch (IOException e) {
 			System.err.println(e);
 		}
