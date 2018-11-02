@@ -8,9 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Test;
 
-import static org.mockito.Mockito.when;
-
-
 public class JsoupUtilitiesTests {
 	
 	@Test
@@ -80,11 +77,5 @@ public class JsoupUtilitiesTests {
 	public void testConnectAndGetPage() {
 		Document doc = JsoupUtilities.connectAndGetPage("http://google.com");
 		assertNotNull(doc);
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void testConnectAndGetPageThrowsError() {
-		when(Jsoup.connect("not a url")).thenThrow(RuntimeException.class);
-		JsoupUtilities.connectAndGetPage("not a url");
 	}
 }
