@@ -1,6 +1,7 @@
 package com.fritz.philsofinder.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -48,7 +49,8 @@ public class PhilosoFinderControllerTests {
 		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start", "end"));
 		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
-		assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertFalse(response.getBody().isPathExists());
 	}
 
 }
