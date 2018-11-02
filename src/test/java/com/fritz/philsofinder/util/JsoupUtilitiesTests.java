@@ -1,13 +1,15 @@
 package com.fritz.philsofinder.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Test;
 
-import com.fritz.philsofinder.util.JsoupUtilities;
+import static org.mockito.Mockito.when;
+
 
 public class JsoupUtilitiesTests {
 	
@@ -73,5 +75,16 @@ public class JsoupUtilitiesTests {
 		
 		assertEquals("secondLink", link.attr("href"));
 	}
+	
+	@Test
+	public void testConnectAndGetPage() {
+		Document doc = JsoupUtilities.connectAndGetPage("http://google.com");
+		assertNotNull(doc);
+	}
 
+	@Test(expected = RuntimeException.class)
+	public void testConnectAndGetPageThrowsError() {
+		when(Jsoup.connect("not a url")).thenThrow(RuntimeException.class);
+		JsoupUtilities.connectAndGetPage("not a url");
+	}
 }
