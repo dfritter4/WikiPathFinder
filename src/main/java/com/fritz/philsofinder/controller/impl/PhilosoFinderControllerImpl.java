@@ -25,16 +25,13 @@ public class PhilosoFinderControllerImpl implements PhilosoFinderController {
 	public ResponseEntity<PathResponse> findPath(
 			@RequestParam("startUrl") String startUrl,
 			@RequestParam(value = "destinationPage", defaultValue = "Philosophy") String destinationPage) {
+		
 		PathResponse pathResponse =  service.getPathToPage(startUrl, destinationPage);
 		
-		ResponseEntity<PathResponse> serviceResponse = null;
-		if(pathResponse.isPathExists()) {
-			serviceResponse = ResponseEntity.ok().body(pathResponse);
-		} else {
-			serviceResponse = ResponseEntity.notFound().build();
-		}
-		
-		return serviceResponse;
+		//will return HTTP.200 status even if the path isn't found
+		//the front-end can handle how to display a PathResponse
+		//where the destinationToPath is empty and hops = -1
+		return ResponseEntity.ok().body(pathResponse);
 	}
 
 }

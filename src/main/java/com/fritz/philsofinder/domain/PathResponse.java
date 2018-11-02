@@ -35,6 +35,7 @@ public class PathResponse {
 	//making it private though because i believe Spring will change
 	//it to public under the hood when attempting to call it via reflection
 	//but i don't want to expose it via traditional methods
+	@SuppressWarnings("unused")
 	private PathResponse() {
 		
 	}
