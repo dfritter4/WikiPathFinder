@@ -4,6 +4,6 @@ import com.fritz.philsofinder.domain.PathResponse;
 
 public interface WikiPhilosophyPagePathFindingService {
 	
-	public PathResponse getPathToPhilosophy(String startPageUrl);
+	public PathResponse getPathToPage(String startPageUrl, String destinationPageName);
 
 }

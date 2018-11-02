@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fritz.philsofinder.cache.CacheKey;
 import com.fritz.philsofinder.cache.CachingSystem;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.repo.PathResponseRepository;
@@ -25,7 +26,7 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 	private PathResponseRepository repo;
 			
 	@Override
-	public PathResponse getPathToPhilosophy(String startPageUrl) {
+	public PathResponse getPathToPage(String startPageUrl, String destinationPageName) {
 
 		// 1) check the cache if the path exists from the start page
 		// 2) if its not in the cache, check the repo
@@ -33,13 +34,13 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 		Document startPageDoc = JsoupUtilities.connectAndGetPage(startPageUrl);
 		String startPageName = JsoupUtilities.getPageName(startPageDoc);
 		
-		PathResponse foundPath = getFromCacheOrRepo(startPageName);
+		PathResponse foundPath = getFromCacheOrRepo(new CacheKey(startPageName, destinationPageName));
 		
 		if(null != foundPath) {
 			return foundPath;
 		}
 		
-		foundPath = findPathToPhiloPage(startPageName, startPageDoc);
+		foundPath = findPathToPhiloPage(startPageName, destinationPageName, startPageDoc);
 		
 		addToCacheAndRepo(foundPath);
 		
@@ -48,19 +49,19 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 	}
 	
 	private void addToCacheAndRepo(PathResponse foundPath) {
-		cache.put(foundPath.getStartingPage(), foundPath);
+		cache.put(new CacheKey(foundPath.getStartingPage(), foundPath.getDestinationPage()), foundPath);
 		repo.save(foundPath);
 	}
 	
-	private PathResponse getFromCacheOrRepo(String pageName) {
-		if(cache.contains(pageName)) {
-			return cache.get(pageName);
+	private PathResponse getFromCacheOrRepo(CacheKey key) {
+		if(cache.contains(key)) {
+			return cache.get(key);
 		}
 		
-		return repo.findByStartingPage(pageName);
+		return repo.findPath(key.getStartPage(), key.getEndPage());
 	}
 	
-	private PathResponse findPathToPhiloPage(String startPageName, Document startPageDoc) {
+	private PathResponse findPathToPhiloPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
 		//main path finding algorithm
 		Integer hops = 0;
@@ -69,13 +70,13 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 		pathSet.add(startPageName);
 				
 		Element href = JsoupUtilities.getFirstValidLink(startPageDoc);
-		while(!"Philosophy".equals(nextPageName) && null != href) {
+		while(!destinationPageName.equals(nextPageName) && null != href) {
 			Document nextPage = JsoupUtilities.connectAndGetPage(href.absUrl("href"));
 			nextPageName = JsoupUtilities.getPageName(nextPage);
 			
 			if(pathSet.contains(nextPageName)) {
 				//found a loop, break and return a "no path exists" object
-				return new PathResponse(startPageName);
+				return new PathResponse(startPageName, destinationPageName);
 			}
 			
 			pathSet.add(nextPageName);
@@ -84,7 +85,7 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 		}
 		
 		String path = buildPathString(pathSet);
-		return new PathResponse(startPageName, path, hops);
+		return new PathResponse(startPageName, destinationPageName, path, hops);
 		
 	}
 	

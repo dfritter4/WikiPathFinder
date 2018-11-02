@@ -8,6 +8,6 @@ import com.fritz.philsofinder.domain.PathResponse;
 @Repository
 public interface PathResponseRepository extends MongoRepository<PathResponse, String>{
 	
-	PathResponse findByStartingPage(String startingPage);
+	PathResponse findPath(String startingPage, String destinationPage);
 
 }

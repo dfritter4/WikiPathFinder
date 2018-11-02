@@ -4,8 +4,8 @@ import com.fritz.philsofinder.domain.PathResponse;
 
 public interface CachingSystem {
 	
-	public void put(String key, PathResponse value);
-	public PathResponse get(String key);
-	public Boolean contains(String key);
+	public void put(CacheKey key, PathResponse value);
+	public PathResponse get(CacheKey key);
+	public Boolean contains(CacheKey key);
 	
 }
