@@ -45,7 +45,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testKnownPathFromRockMusic() {
 		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
-		when(repo.findPath(anyString(), anyString())).thenReturn(null);
+		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", DESTINATION_PAGE);
 		
 		assertEquals(new Integer(9), response.getHopsOnPath());
@@ -57,7 +57,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testKnownPathFromCaptainAmerica() {
 		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
-		when(repo.findPath(anyString(), anyString())).thenReturn(null);
+		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Captain_America", DESTINATION_PAGE);
 		
 		assertEquals(new Integer(6), response.getHopsOnPath());
@@ -69,7 +69,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testPathDoesNotExistFromPaper() {
 		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
-		when(repo.findPath(anyString(), anyString())).thenReturn(null);
+		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Paper", DESTINATION_PAGE);
 		
 		assertEquals(new Integer(-1), response.getHopsOnPath());
@@ -81,7 +81,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testPathDoesNotExistFromProton() {
 		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
-		when(repo.findPath(anyString(), anyString())).thenReturn(null);
+		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Proton", DESTINATION_PAGE);
 		
 		assertEquals(new Integer(-1), response.getHopsOnPath());

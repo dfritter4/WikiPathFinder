@@ -37,7 +37,7 @@ public class PhilosoFinderControllerTests {
 	@Test
 	public void testControllerPathExists() {
 		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start", "end", "path -> Philsophy", 1));
-		ResponseEntity<PathResponse> response = controller.findPath("some_url");
+		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
 		assertTrue(response.getBody().isPathExists());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -46,7 +46,7 @@ public class PhilosoFinderControllerTests {
 	@Test
 	public void testControllerNoPathExists() {
 		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start", "end"));
-		ResponseEntity<PathResponse> response = controller.findPath("some_url");
+		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
 		assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
 	}

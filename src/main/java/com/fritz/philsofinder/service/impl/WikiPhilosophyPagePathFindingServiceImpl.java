@@ -58,12 +58,12 @@ public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyP
 			return cache.get(key);
 		}
 		
-		return repo.findPath(key.getStartPage(), key.getEndPage());
+		return repo.findByStartingPageAndDestinationPage(key.getStartPage(), key.getEndPage());
 	}
 	
+	//primary path finding algorithm
 	private PathResponse findPathToPhiloPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
-		//main path finding algorithm
 		Integer hops = 0;
 		String nextPageName = "";
 		AbstractSet<String> pathSet = new LinkedHashSet<String>();

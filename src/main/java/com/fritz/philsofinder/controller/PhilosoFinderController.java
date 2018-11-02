@@ -6,6 +6,6 @@ import com.fritz.philsofinder.domain.PathResponse;
 
 public interface PhilosoFinderController {
 
-	public ResponseEntity<PathResponse> findPath(String startWikiPageUrl);
+	public ResponseEntity<PathResponse> findPath(String startWikiPageUrl, String destinationPage);
 	
 }

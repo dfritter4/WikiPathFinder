@@ -20,13 +20,11 @@ public class PhilosoFinderControllerImpl implements PhilosoFinderController {
 	@Autowired
 	private WikiPhilosophyPagePathFindingService service;
 	
-	//hard-coded for now, but could easily switch the findPath end-point
-	//to accept any destination page
-	private final String destinationPage = "Philosophy"; 
-	
 	@Override
 	@GetMapping("/findpath")
-	public ResponseEntity<PathResponse> findPath(@RequestParam("startUrl") String startUrl) {
+	public ResponseEntity<PathResponse> findPath(
+			@RequestParam("startUrl") String startUrl,
+			@RequestParam(value = "destinationPage", defaultValue = "Philosophy") String destinationPage) {
 		PathResponse pathResponse =  service.getPathToPage(startUrl, destinationPage);
 		
 		ResponseEntity<PathResponse> serviceResponse = null;
