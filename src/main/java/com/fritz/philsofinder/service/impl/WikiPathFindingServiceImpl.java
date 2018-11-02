@@ -3,6 +3,7 @@ package com.fritz.philsofinder.service.impl;
 import java.util.AbstractSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -49,8 +50,14 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 	}
 	
 	private void addToCacheAndRepo(PathResponse foundPath) {
-		cache.put(new CacheKey(foundPath.getStartingPage(), foundPath.getDestinationPage()), foundPath);
-		repo.save(foundPath);
+		//will add the path AND all sub-paths from start to destination
+		//to the cache and repository
+		for(int hopPos = 0; hopPos < foundPath.getHopsToDestination().size(); ++hopPos) {
+			List<String> fromHopToDestination = foundPath.getHopsToDestination().subList(hopPos, foundPath.getHopsToDestination().size());
+			PathResponse intermediatePathResponse  = new PathResponse(fromHopToDestination.get(0), foundPath.getDestinationPage(), fromHopToDestination);
+			cache.put(new CacheKey(intermediatePathResponse.getStartingPage(), intermediatePathResponse.getDestinationPage()), intermediatePathResponse);
+			repo.save(intermediatePathResponse);
+		}
 	}
 	
 	private PathResponse getFromCacheOrRepo(String startPageName, String destinationPageName) {
@@ -65,7 +72,6 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 	//primary path finding algorithm
 	private PathResponse findPathToDestinationPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
-		Integer hops = 0;
 		String nextPageName = "";
 		AbstractSet<String> pathSet = new LinkedHashSet<String>();
 		pathSet.add(startPageName);
@@ -82,7 +88,6 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 			
 			pathSet.add(nextPageName);
 			href = JsoupUtilities.getFirstValidLink(nextPage);
-			hops++;
 		}
 		
 		return new PathResponse(startPageName, destinationPageName, new LinkedList<String>(pathSet));

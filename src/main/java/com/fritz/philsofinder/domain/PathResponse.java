@@ -21,13 +21,13 @@ public class PathResponse {
 	@Indexed
 	private String destinationPage;
 	
-	private List<String> hopsAlongDestination;
+	private List<String> hopsToDestination;
 	private Date foundOnDate;
 	
 	public PathResponse(String startingPage, String destinationPage, List<String> hopsAlongDestination) {
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
-		this.hopsAlongDestination = hopsAlongDestination;
+		this.hopsToDestination = hopsAlongDestination;
 		this.foundOnDate = new Date();
 	}
 	
@@ -45,19 +45,20 @@ public class PathResponse {
 	public PathResponse(String startingPage, String destinationPage) {
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
-		this.hopsAlongDestination = Collections.emptyList();
+		this.hopsToDestination = Collections.emptyList();
 		this.foundOnDate = new Date();
 	}
 	
 	public String getStartingPage() { return this.startingPage; }
 	public String getDestinationPage() { return this.destinationPage; }
 	public Date getFoundOnDate() { return this.foundOnDate; }
-	public Integer getHopsOnPath() { return this.hopsAlongDestination.size()-1; }
-	public Boolean isPathExists() { return !this.hopsAlongDestination.isEmpty(); }
+	public Integer getHopsOnPath() { return this.hopsToDestination.size()-1; }
+	public Boolean isPathExists() { return !this.hopsToDestination.isEmpty(); }
+	public List<String> getHopsToDestination() { return this.hopsToDestination; }
 	
 	public String buildPathString() {
 		StringBuilder path = new StringBuilder();
-		for(Iterator<String> pathItr = this.hopsAlongDestination.iterator(); pathItr.hasNext();) {
+		for(Iterator<String> pathItr = this.hopsToDestination.iterator(); pathItr.hasNext();) {
 			path.append(pathItr.next());
 			if(pathItr.hasNext()) {
 				path.append(" -> ");

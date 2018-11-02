@@ -3,6 +3,7 @@ package com.fritz.philsofinder.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -75,7 +76,6 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testPathIsRetrievedFromCache() {
 		
-		//get path a second time to verify it's retrieved from cache
 		CacheKey key = new CacheKey("Rock music", "Philosophy");
 		when(cache.contains(key)).thenReturn(true);
 		when(cache.get(key)).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
@@ -85,6 +85,25 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		assertEquals(new Integer(9), response.getHopsOnPath());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.buildPathString());
 		assertEquals("Rock music", response.getStartingPage());
+		assertTrue(response.isPathExists());
+	}
+	
+	@Test
+	public void testSubPathIsRetrievedFromCache() {
+		
+		CacheKey key = new CacheKey("Rock music", "Philosophy");
+		when(cache.contains(key)).thenReturn(true);
+		when(cache.get(key)).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
+		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
+		verify(repo, never()).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
+		when(cache.contains(new CacheKey("Music industry", "Philosophy"))).thenReturn(true);
+		when(cache.get(key)).thenReturn(new PathResponse("Music industry", "Philosophy", rockPathList.subList(2, rockPathList.size())));
+		response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
+		verify(cache, times(2)).get(any());
+		
+		assertEquals(new Integer(7), response.getHopsOnPath());
+		assertEquals("Music industry", response.getStartingPage());
+		assertEquals("Philosophy", response.getDestinationPage());
 		assertTrue(response.isPathExists());
 	}
 	
