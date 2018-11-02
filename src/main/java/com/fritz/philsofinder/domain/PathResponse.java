@@ -32,7 +32,10 @@ public class PathResponse {
 	
 	//for some reason Mongo/Spring needs this to
 	//deserialize the object when retrieving from the mongo repo
-	public PathResponse() {
+	//making it private though because i believe Spring will change
+	//it to public under the hood when attempting to call it via
+	//but i don't want to expose it via traditional methods
+	private PathResponse() {
 		
 	}
 	
