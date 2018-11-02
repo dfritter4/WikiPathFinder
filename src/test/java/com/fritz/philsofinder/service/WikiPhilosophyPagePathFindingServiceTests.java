@@ -19,7 +19,7 @@ import com.fritz.philsofinder.cache.CacheKey;
 import com.fritz.philsofinder.cache.CachingSystem;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.repo.PathResponseRepository;
-import com.fritz.philsofinder.service.impl.WikiPhilosophyPagePathFindingServiceImpl;
+import com.fritz.philsofinder.service.impl.WikiPathFindingServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class WikiPhilosophyPagePathFindingServiceTests {
@@ -31,7 +31,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	private PathResponseRepository repo;
 	
 	@InjectMocks
-	private WikiPhilosophyPagePathFindingServiceImpl service;
+	private WikiPathFindingServiceImpl service;
 	
 	private final String PATH_FROM_ROCK_MUSIC = "Rock music -> Popular music -> Music industry -> Musical composition -> Music -> Culture -> Social behavior -> Behavior -> Action (philosophy) -> Philosophy";
 	private final String PATH_FROM_CAPTAIN_AMERICA = "Captain America -> Character (arts) -> Person -> Reason -> Consciousness -> Quality (philosophy) -> Philosophy";

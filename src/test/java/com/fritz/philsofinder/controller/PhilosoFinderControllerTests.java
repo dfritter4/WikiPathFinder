@@ -17,14 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fritz.philsofinder.controller.impl.PhilosoFinderControllerImpl;
 import com.fritz.philsofinder.domain.PathResponse;
-import com.fritz.philsofinder.service.WikiPhilosophyPagePathFindingService;
+import com.fritz.philsofinder.service.WikiPathFindingService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PhilosoFinderControllerTests {
 	
 	@Mock
-	private WikiPhilosophyPagePathFindingService service;
+	private WikiPathFindingService service;
 	
 	@InjectMocks
 	private PhilosoFinderControllerImpl controller;

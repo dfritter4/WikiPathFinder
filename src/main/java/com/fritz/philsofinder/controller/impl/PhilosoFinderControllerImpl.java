@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fritz.philsofinder.controller.PhilosoFinderController;
 import com.fritz.philsofinder.domain.PathResponse;
-import com.fritz.philsofinder.service.WikiPhilosophyPagePathFindingService;
+import com.fritz.philsofinder.service.WikiPathFindingService;
 
 @CrossOrigin("*")
 @RequestMapping("/api")
@@ -18,7 +18,7 @@ import com.fritz.philsofinder.service.WikiPhilosophyPagePathFindingService;
 public class PhilosoFinderControllerImpl implements PhilosoFinderController {
 
 	@Autowired
-	private WikiPhilosophyPagePathFindingService service;
+	private WikiPathFindingService service;
 	
 	@Override
 	@GetMapping("/findpath")

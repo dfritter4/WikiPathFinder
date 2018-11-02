@@ -19,7 +19,7 @@ public class BasicCacheTests {
 	}
 	
 	@Test
-	public void testRetreiveCacheWithKnownEntry() {
+	public void testRetreiveCacheWithEntry() {
 		CacheKey key = new CacheKey("start","end"); 
 		PathResponse path = new PathResponse("start","end", "start -> end", 1);
 		cache.put(key, path);

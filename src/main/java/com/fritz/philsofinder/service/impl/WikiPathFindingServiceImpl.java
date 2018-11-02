@@ -13,11 +13,11 @@ import com.fritz.philsofinder.cache.CacheKey;
 import com.fritz.philsofinder.cache.CachingSystem;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.repo.PathResponseRepository;
-import com.fritz.philsofinder.service.WikiPhilosophyPagePathFindingService;
+import com.fritz.philsofinder.service.WikiPathFindingService;
 import com.fritz.philsofinder.util.JsoupUtilities;
 
 @Component
-public class WikiPhilosophyPagePathFindingServiceImpl implements WikiPhilosophyPagePathFindingService {
+public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 
 	@Autowired
 	private CachingSystem cache;

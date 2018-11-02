@@ -13,13 +13,13 @@ public class PathResponse {
 	private String uniqueId;
 	
 	@Indexed
-	private final String startingPage;
+	private String startingPage;
 	
 	@Indexed
-	private final String destinationPage;
+	private String destinationPage;
 	
-	private final String pathToDestination;
-	private final Integer hopsOnPath;
+	private String pathToDestination;
+	private Integer hopsOnPath;
 	private Date foundOnDate;
 	
 	public PathResponse(String startingPage, String destinationPage, String pathToDestination, Integer hopsOnPath) {
@@ -28,6 +28,12 @@ public class PathResponse {
 		this.pathToDestination = pathToDestination;
 		this.hopsOnPath = hopsOnPath;
 		this.foundOnDate = new Date();
+	}
+	
+	//for some reason Mongo/Spring needs this to
+	//deserialize the object when retrieving from the mongo repo
+	public PathResponse() {
+		
 	}
 	
 	// this constructs a "no path found" Object
