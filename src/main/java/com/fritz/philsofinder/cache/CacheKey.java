@@ -41,7 +41,7 @@ public class CacheKey {
 		CacheKey other = (CacheKey) obj;
 		if(!endPage.equals(other.endPage))
 			return false;
-		if (!startPage.equals(other.startPage))
+		if(!startPage.equals(other.startPage))
 			return false;
 		return true;
 	}

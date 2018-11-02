@@ -41,7 +41,7 @@ public class WikiPathFinderControllerTests {
 		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
 		assertTrue(response.getBody().isPathExists());
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	@Test
@@ -49,7 +49,7 @@ public class WikiPathFinderControllerTests {
 		when(service.getPathToPage(anyString(), anyString())).thenReturn(new PathResponse("start", "end"));
 		ResponseEntity<PathResponse> response = controller.findPath("some_url", "destination");
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertFalse(response.getBody().isPathExists());
 	}
 

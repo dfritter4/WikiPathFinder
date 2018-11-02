@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
 
@@ -14,13 +13,23 @@ public class JsoupUtilities {
 	
 	private static final String ARTICLE_CONTENT_ELEMENT_ID = "mw-content-text";
 	
+	private JsoupUtilities() {
+		
+	}
+	
 	public static Document connectAndGetPage(String pageUrl) {
 		Document startPage = null;
 		
 		try {
 			startPage = Jsoup.connect(pageUrl).get();
 		} catch (IOException e) {
+			//would typically have a logger like log4j handle this
+			//for using system.err for simplicity
+			//
+			//same for throwing generic RuntimeException, should 
+			//probably define my own exception and handle it but...simplicity
 			System.err.println(e);
+			throw new RuntimeException("Could not connect to wiki page", e);
 		}
 		
 		return startPage;
@@ -34,7 +43,7 @@ public class JsoupUtilities {
 		Element mainContent = page.getElementById(ARTICLE_CONTENT_ELEMENT_ID);		
 		Elements primaryParagraphs = mainContent.getElementsByTag("p");
 		
-		Element firstParagraphWithLinks = new Element(Tag.valueOf("p"), "");
+		Element firstParagraphWithLinks;
 		
 		for(Iterator<Element> paragraphIter = primaryParagraphs.iterator(); paragraphIter.hasNext();) {
 			firstParagraphWithLinks = paragraphIter.next();
