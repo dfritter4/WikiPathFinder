@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		assertEquals(new Integer(9), response.getHopsOnPath());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.buildPathString());
 		assertEquals("Rock music", response.getStartingPage());
+		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertTrue(response.isPathExists());
 	}
 	
@@ -132,6 +134,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		assertEquals(new Integer(6), response.getHopsOnPath());
 		assertEquals(PATH_FROM_CAPTAIN_AMERICA, response.buildPathString());
 		assertEquals("Captain America", response.getStartingPage());
+		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertTrue(response.isPathExists());
 	}
 	
@@ -144,6 +147,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		assertEquals(new Integer(-1), response.getHopsOnPath());
 		assertEquals("", response.buildPathString());
 		assertEquals("Paper", response.getStartingPage());
+		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertFalse(response.isPathExists());
 	}
 	
@@ -156,6 +160,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		assertEquals(new Integer(-1), response.getHopsOnPath());
 		assertEquals("", response.buildPathString());
 		assertEquals("Proton", response.getStartingPage());
+		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertFalse(response.isPathExists());
 	}
 
