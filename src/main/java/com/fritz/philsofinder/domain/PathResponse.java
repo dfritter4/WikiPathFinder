@@ -33,6 +33,10 @@ public class PathResponse {
 		this.destinationPage = destinationPage;
 		this.hopsToDestination = hopsAlongDestination;
 		this.foundOnDate = new Date();
+		
+		//building the pathString during object construction so when
+		//spring converts the object to JSON when returning from the API
+		//call it will be serialized and ready to use by the front-end
 		this.pathString = buildPathString();
 	}
 	
