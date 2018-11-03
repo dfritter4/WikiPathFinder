@@ -35,13 +35,7 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 		Document startPageDoc = JsoupUtilities.connectAndGetPage(startPageUrl);
 		String startPageName = JsoupUtilities.getPageName(startPageDoc);
 		
-		PathResponse foundPath = getFromCacheOrRepo(startPageName, destinationPageName);
-		
-		if(null != foundPath) {
-			return foundPath;
-		}
-		
-		foundPath = findPathToDestinationPage(startPageName, destinationPageName, startPageDoc);
+		PathResponse foundPath = findPathToDestinationPage(startPageName, destinationPageName, startPageDoc);
 		
 		addToCacheAndRepo(foundPath);
 		
@@ -72,14 +66,27 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 	//primary path finding algorithm
 	private PathResponse findPathToDestinationPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
+		PathResponse path = null;
+		path = getFromCacheOrRepo(startPageName, destinationPageName);
+		if(null != path) {
+			return path;
+		}
+		
 		String nextPageName = "";
 		AbstractSet<String> pathSet = new LinkedHashSet<String>();
 		pathSet.add(startPageName);
 				
 		Element href = JsoupUtilities.getFirstValidLink(startPageDoc);
+		
 		while(!destinationPageName.equals(nextPageName) && null != href) {
+			
 			Document nextPage = JsoupUtilities.connectAndGetPage(href.absUrl("href"));
 			nextPageName = JsoupUtilities.getPageName(nextPage);
+			
+			path = getFromCacheOrRepo(nextPageName, destinationPageName);
+			if(null != path) {
+				return mergePaths(new LinkedList<String>(pathSet), path);
+			}
 			
 			if(pathSet.contains(nextPageName)) {
 				//found a loop, break and return a "no path exists" object
@@ -92,6 +99,11 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 		
 		return new PathResponse(startPageName, destinationPageName, new LinkedList<String>(pathSet));
 		
+	}
+	
+	private PathResponse mergePaths(List<String> currentPath, PathResponse remainingPath) {
+		currentPath.addAll(remainingPath.getHopsToDestination());
+		return new PathResponse(currentPath.get(0), currentPath.get(currentPath.size()-1), currentPath);
 	}
 
 }

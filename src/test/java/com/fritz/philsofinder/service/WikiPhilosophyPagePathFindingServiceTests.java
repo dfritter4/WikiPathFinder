@@ -109,6 +109,19 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	}
 	
 	@Test
+	public void testAlreadyFoundPathRetreivedFromCacheAndMerged() {
+		when(cache.contains(any())).thenReturn(false);
+		when(repo.findByStartingPageAndDestinationPage("Rock music", "Philosophy")).thenReturn(null);
+		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
+		when(cache.contains(new CacheKey("Rock and roll", "Philosophy"))).thenReturn(false);
+		when(cache.contains(new CacheKey("Popular music", "Philosophy"))).thenReturn(true);
+		when(cache.get(new CacheKey("Popular music", "Philosophy"))).thenReturn(new PathResponse("Popular music", "Philosophy", rockPathList));
+		response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_and_roll", "Philosophy");
+		verify(cache, times(1)).get(new CacheKey("Popular music", "Philosophy"));
+		assertEquals("Rock and roll", response.getStartingPage());
+	}
+	
+	@Test
 	public void testPathIsRetrievedFromRepo() {
 		
 		//get path a second time to verify it's retrieved from cache
