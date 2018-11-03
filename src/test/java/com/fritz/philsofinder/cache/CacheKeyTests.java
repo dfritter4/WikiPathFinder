@@ -22,6 +22,19 @@ public class CacheKeyTests {
 	}
 	
 	@Test
+	public void testSameKeys() {
+		CacheKey key1 = new CacheKey("start", "end");
+		CacheKey key2 = key1;
+		assertEquals(key1, key2);
+	}
+	
+	@Test
+	public void testEqualsDifferentClass() {
+		CacheKey key1 = new CacheKey("start", "end");
+		assertNotEquals(new Integer(0), key1);
+	}
+	
+	@Test
 	public void testUnequalKeys() {
 		CacheKey key1 = new CacheKey("start", "end");
 		CacheKey key2 = new CacheKey("start2", "end2");
