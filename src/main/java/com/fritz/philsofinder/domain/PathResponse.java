@@ -23,6 +23,7 @@ public class PathResponse {
 	
 	private List<String> hopsToDestination;
 	private Date foundOnDate;
+	private String pathString;
 	
 	public PathResponse(String startingPage, String destinationPage, List<String> hopsAlongDestination) {
 		if(null == startingPage || null == destinationPage) {
@@ -32,6 +33,7 @@ public class PathResponse {
 		this.destinationPage = destinationPage;
 		this.hopsToDestination = hopsAlongDestination;
 		this.foundOnDate = new Date();
+		this.pathString = buildPathString();
 	}
 	
 	//for some reason Mongo/Spring needs this to
@@ -53,6 +55,7 @@ public class PathResponse {
 		this.destinationPage = destinationPage;
 		this.hopsToDestination = Collections.emptyList();
 		this.foundOnDate = new Date();
+		this.pathString = "";
 	}
 	
 	public String getStartingPage() { return this.startingPage; }
@@ -61,8 +64,9 @@ public class PathResponse {
 	public Integer getHopsOnPath() { return this.hopsToDestination.size()-1; }
 	public Boolean isPathExists() { return !this.hopsToDestination.isEmpty(); }
 	public List<String> getHopsToDestination() { return this.hopsToDestination; }
+	public String getPathString() { return this.pathString; }
 	
-	public String buildPathString() {
+	private String buildPathString() {
 		StringBuilder path = new StringBuilder();
 		for(Iterator<String> pathItr = this.hopsToDestination.iterator(); pathItr.hasNext();) {
 			path.append(pathItr.next());
