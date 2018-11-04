@@ -3,9 +3,7 @@ package com.fritz.philsofinder.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,21 +17,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fritz.philsofinder.cache.CacheKey;
-import com.fritz.philsofinder.cache.CachingSystem;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.repo.PathResponseRepository;
 import com.fritz.philsofinder.service.impl.WikiPathFindingServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class WikiPhilosophyPagePathFindingServiceTests {
-	
-	@Mock
-	private CachingSystem cache;
 	
 	@Mock
 	private PathResponseRepository repo;
@@ -64,7 +56,6 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	
 	@Test
 	public void testKnownPathFromRockMusic() {
-		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", DESTINATION_PAGE);
 		
@@ -77,11 +68,8 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	@Test
 	public void testPathIsRetrievedFromCache() {
 		
-		CacheKey key = new CacheKey("Rock music", "Philosophy");
-		when(cache.contains(key)).thenReturn(true);
-		when(cache.get(key)).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
-		verify(repo, never()).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
+		verify(repo, times(1)).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
 
 		assertEquals(new Integer(9), response.getHopsCount());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.getPathString());
@@ -90,43 +78,16 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	}
 	
 	@Test
-	public void testSubPathIsRetrievedFromCache() {
-		
-		CacheKey key = new CacheKey("Rock music", "Philosophy");
-		when(cache.contains(key)).thenReturn(true);
-		when(cache.get(key)).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
-		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
-		verify(repo, never()).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
-		when(cache.contains(new CacheKey("Music industry", "Philosophy"))).thenReturn(true);
-		when(cache.get(key)).thenReturn(new PathResponse("Music industry", "Philosophy", rockPathList.subList(2, rockPathList.size())));
-		response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
-		verify(cache, times(2)).get(any());
-		
-		assertEquals(new Integer(7), response.getHopsCount());
-		assertEquals("Music industry", response.getStartingPage());
-		assertEquals("Philosophy", response.getDestinationPage());
-		assertTrue(response.isPathExists());
-	}
-	
-	@Test
 	public void testAlreadyFoundPathRetreivedFromCacheAndMerged() {
-		when(cache.contains(any())).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage("Rock music", "Philosophy")).thenReturn(null);
+		when(repo.findByStartingPageAndDestinationPage("Music industry", "Philosophy")).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
-		when(cache.contains(new CacheKey("Rock and roll", "Philosophy"))).thenReturn(false);
-		when(cache.contains(new CacheKey("Popular music", "Philosophy"))).thenReturn(true);
-		when(cache.get(new CacheKey("Popular music", "Philosophy"))).thenReturn(new PathResponse("Popular music", "Philosophy", rockPathList));
-		response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_and_roll", "Philosophy");
-		verify(cache, times(1)).get(new CacheKey("Popular music", "Philosophy"));
-		assertEquals("Rock and roll", response.getStartingPage());
+		verify(repo, times(1)).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
+		assertEquals("Rock music", response.getStartingPage());
 	}
 	
 	@Test
 	public void testPathIsRetrievedFromRepo() {
-		
-		//get path a second time to verify it's retrieved from cache
-		CacheKey key = new CacheKey("Rock music", "Philosophy");
-		when(cache.contains(key)).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage("Rock music", "Philosophy")).thenReturn(new PathResponse("Rock music", "Philosophy", rockPathList));
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
 		verify(repo, times(1)).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
@@ -140,7 +101,6 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	
 	@Test
 	public void testKnownPathFromCaptainAmerica() {
-		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Captain_America", DESTINATION_PAGE);
 		
@@ -153,7 +113,6 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	
 	@Test
 	public void testPathDoesNotExistFromPaper() {
-		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Paper", DESTINATION_PAGE);
 		
@@ -166,7 +125,6 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 	
 	@Test
 	public void testPathDoesNotExistFromProton() {
-		when(cache.contains(Mockito.mock(CacheKey.class))).thenReturn(false);
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Proton", DESTINATION_PAGE);
 		

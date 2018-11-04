@@ -10,8 +10,6 @@ import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fritz.philsofinder.cache.CacheKey;
-import com.fritz.philsofinder.cache.CachingSystem;
 import com.fritz.philsofinder.domain.PathResponse;
 import com.fritz.philsofinder.repo.PathResponseRepository;
 import com.fritz.philsofinder.service.WikiPathFindingService;
@@ -19,9 +17,6 @@ import com.fritz.philsofinder.util.JsoupUtilities;
 
 @Component
 public class WikiPathFindingServiceImpl implements WikiPathFindingService {
-
-	@Autowired
-	private CachingSystem cache;
 	
 	@Autowired
 	private PathResponseRepository repo;
@@ -49,25 +44,14 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 		for(int hopPos = 0; hopPos < foundPath.getHopsToDestination().size(); ++hopPos) {
 			List<String> fromHopToDestination = foundPath.getHopsToDestination().subList(hopPos, foundPath.getHopsToDestination().size());
 			PathResponse intermediatePathResponse  = new PathResponse(fromHopToDestination.get(0), foundPath.getDestinationPage(), fromHopToDestination);
-			cache.put(new CacheKey(intermediatePathResponse.getStartingPage(), intermediatePathResponse.getDestinationPage()), intermediatePathResponse);
 			repo.save(intermediatePathResponse);
 		}
 	}
-	
-	private PathResponse getFromCacheOrRepo(String startPageName, String destinationPageName) {
-		CacheKey key = new CacheKey(startPageName, destinationPageName);
-		if(cache.contains(key)) {
-			return cache.get(key);
-		}
-		
-		return repo.findByStartingPageAndDestinationPage(startPageName, destinationPageName);
-	}
-	
 	//primary path finding algorithm
 	private PathResponse findPathToDestinationPage(String startPageName, String destinationPageName, Document startPageDoc) {
 		
 		PathResponse path = null;
-		path = getFromCacheOrRepo(startPageName, destinationPageName);
+		path = repo.findByStartingPageAndDestinationPage(startPageName, destinationPageName);
 		if(null != path) {
 			return path;
 		}
@@ -83,7 +67,7 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 			Document nextPage = JsoupUtilities.connectAndGetPage(href.absUrl("href"));
 			nextPageName = JsoupUtilities.getPageName(nextPage);
 			
-			path = getFromCacheOrRepo(nextPageName, destinationPageName);
+			path = repo.findByStartingPageAndDestinationPage(nextPageName, destinationPageName);
 			if(null != path) {
 				return mergePaths(new LinkedList<String>(pathSet), path);
 			}

@@ -1,6 +1,7 @@
 package com.fritz.philsofinder.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class PathResponseTests {
 		PathResponse response = new PathResponse("start", "end", Arrays.asList("start", "end"));
 		assertEquals("start", response.getStartingPage());
 		assertEquals("end", response.getDestinationPage());
-		assertEquals(new Integer(1), response.getHopsCount());
+		assertEquals(Integer.valueOf(1), response.getHopsCount());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertTrue(response.isPathExists());
 	}
@@ -34,6 +35,16 @@ public class PathResponseTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalStartAndEndPage() {
 		new PathResponse(null, null, Collections.emptyList());
+	}
+	
+	@Test
+	public void testPathFoundConstructorWithEmptyHopsList() {
+		PathResponse response = new PathResponse("start", "end", Collections.emptyList());
+		assertEquals("start", response.getStartingPage());
+		assertEquals("end", response.getDestinationPage());
+		assertEquals(Integer.valueOf(-1), response.getHopsCount());
+		assertEquals("", response.getPathString());
+		assertFalse(response.isPathExists());
 	}
 
 }
