@@ -63,7 +63,7 @@ public class PathResponseRepositoryTests {
 		assertEquals("end3", response.getDestinationPage());
 		assertTrue(response.isPathExists());
 		assertEquals("start3 -> hop1 -> hop2 -> end3", response.getPathString());
-		assertEquals(new Integer(3), response.getHopsOnPath());
+		assertEquals(new Integer(3), response.getHopsCount());
 	}
 	
 	@Test

@@ -16,7 +16,7 @@ public class PathResponseTests {
 		PathResponse response = new PathResponse("start", "end", Arrays.asList("start", "end"));
 		assertEquals("start", response.getStartingPage());
 		assertEquals("end", response.getDestinationPage());
-		assertEquals(new Integer(1), response.getHopsOnPath());
+		assertEquals(new Integer(1), response.getHopsCount());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
 		assertTrue(response.isPathExists());
 	}

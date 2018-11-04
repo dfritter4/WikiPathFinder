@@ -24,20 +24,25 @@ public class PathResponse {
 	private List<String> hopsToDestination;
 	private Date foundOnDate;
 	private String pathString;
+	private Integer hopsCount;
 	
 	public PathResponse(String startingPage, String destinationPage, List<String> hopsAlongDestination) {
 		if(null == startingPage || null == destinationPage) {
 			throw new IllegalArgumentException("startingPage or destinationPage cannot be null");
 		}
+		if(hopsAlongDestination.isEmpty()) {
+			this.hopsToDestination = Collections.emptyList();
+			this.hopsCount = Integer.valueOf(-1);
+			this.pathString = "";
+		} else {
+			this.hopsToDestination = hopsAlongDestination;
+			this.pathString = buildPathString();
+			this.hopsCount = this.hopsToDestination.size() - 1;
+
+		}
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
-		this.hopsToDestination = hopsAlongDestination;
 		this.foundOnDate = new Date();
-		
-		//building the pathString during object construction so when
-		//spring converts the object to JSON when returning from the API
-		//call it will be serialized and ready to use by the front-end
-		this.pathString = buildPathString();
 	}
 	
 	//for some reason Mongo/Spring needs this to
@@ -58,6 +63,7 @@ public class PathResponse {
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
 		this.hopsToDestination = Collections.emptyList();
+		this.hopsCount = Integer.valueOf(-1);
 		this.foundOnDate = new Date();
 		this.pathString = "";
 	}
@@ -65,8 +71,8 @@ public class PathResponse {
 	public String getStartingPage() { return this.startingPage; }
 	public String getDestinationPage() { return this.destinationPage; }
 	public Date getFoundOnDate() { return this.foundOnDate; }
-	public Integer getHopsOnPath() { return this.hopsToDestination.size()-1; }
-	public Boolean isPathExists() { return !this.hopsToDestination.isEmpty(); }
+	public Integer getHopsCount() { return this.hopsCount; }
+	public Boolean isPathExists() { return this.hopsCount != -1; }
 	public List<String> getHopsToDestination() { return this.hopsToDestination; }
 	public String getPathString() { return this.pathString; }
 	

@@ -68,7 +68,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", DESTINATION_PAGE);
 		
-		assertEquals(new Integer(9), response.getHopsOnPath());
+		assertEquals(new Integer(9), response.getHopsCount());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.getPathString());
 		assertEquals("Rock music", response.getStartingPage());
 		assertTrue(response.isPathExists());
@@ -83,7 +83,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
 		verify(repo, never()).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
 
-		assertEquals(new Integer(9), response.getHopsOnPath());
+		assertEquals(new Integer(9), response.getHopsCount());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.getPathString());
 		assertEquals("Rock music", response.getStartingPage());
 		assertTrue(response.isPathExists());
@@ -102,7 +102,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
 		verify(cache, times(2)).get(any());
 		
-		assertEquals(new Integer(7), response.getHopsOnPath());
+		assertEquals(new Integer(7), response.getHopsCount());
 		assertEquals("Music industry", response.getStartingPage());
 		assertEquals("Philosophy", response.getDestinationPage());
 		assertTrue(response.isPathExists());
@@ -131,7 +131,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Rock_music", "Philosophy");
 		verify(repo, times(1)).findByStartingPageAndDestinationPage("Rock music", "Philosophy");
 
-		assertEquals(new Integer(9), response.getHopsOnPath());
+		assertEquals(new Integer(9), response.getHopsCount());
 		assertEquals(PATH_FROM_ROCK_MUSIC, response.getPathString());
 		assertEquals("Rock music", response.getStartingPage());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
@@ -144,7 +144,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Captain_America", DESTINATION_PAGE);
 		
-		assertEquals(new Integer(6), response.getHopsOnPath());
+		assertEquals(new Integer(6), response.getHopsCount());
 		assertEquals(PATH_FROM_CAPTAIN_AMERICA, response.getPathString());
 		assertEquals("Captain America", response.getStartingPage());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
@@ -157,7 +157,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Paper", DESTINATION_PAGE);
 		
-		assertEquals(new Integer(-1), response.getHopsOnPath());
+		assertEquals(new Integer(-1), response.getHopsCount());
 		assertEquals("", response.getPathString());
 		assertEquals("Paper", response.getStartingPage());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
@@ -170,7 +170,7 @@ public class WikiPhilosophyPagePathFindingServiceTests {
 		when(repo.findByStartingPageAndDestinationPage(anyString(), anyString())).thenReturn(null);
 		PathResponse response = service.getPathToPage("https://en.wikipedia.org/wiki/Proton", DESTINATION_PAGE);
 		
-		assertEquals(new Integer(-1), response.getHopsOnPath());
+		assertEquals(new Integer(-1), response.getHopsCount());
 		assertEquals("", response.getPathString());
 		assertEquals("Proton", response.getStartingPage());
 		assertEquals(new Date().toString(), response.getFoundOnDate().toString());
