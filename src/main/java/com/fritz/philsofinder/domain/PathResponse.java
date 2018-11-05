@@ -56,15 +56,7 @@ public class PathResponse {
 	
 	// this constructs a "no path found" Object
 	public PathResponse(String startingPage, String destinationPage) {
-		if(null == startingPage || null == destinationPage) {
-			throw new IllegalArgumentException("startingPage or destinationPage cannot be null");
-		}
-		this.startingPage = startingPage;
-		this.destinationPage = destinationPage;
-		this.hopsToDestination = Collections.emptyList();
-		this.hopsCount = Integer.valueOf(-1);
-		this.foundOnDate = new Date();
-		this.pathString = "";
+		this(startingPage, destinationPage, Collections.emptyList());
 	}
 	
 	public String getStartingPage() { return this.startingPage; }
