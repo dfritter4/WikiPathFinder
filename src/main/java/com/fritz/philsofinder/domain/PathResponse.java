@@ -30,18 +30,20 @@ public class PathResponse {
 		if(null == startingPage || null == destinationPage) {
 			throw new IllegalArgumentException("startingPage or destinationPage cannot be null");
 		}
+		
 		if(hopsAlongDestination.isEmpty()) {
 			this.hopsCount = Integer.valueOf(-1);
 			this.pathString = "";
 		} else {
-			this.hopsCount = this.hopsToDestination.size() - 1;
-			this.pathString = buildPathString();
-
+			this.hopsCount = hopsAlongDestination.size() - 1;
+			this.pathString = buildPathString(hopsAlongDestination);
 		}
+		
 		this.hopsToDestination = hopsAlongDestination;
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
 		this.foundOnDate = new Date();
+		
 	}
 	
 	//for some reason Mongo/Spring needs this to
@@ -67,9 +69,9 @@ public class PathResponse {
 	public List<String> getHopsToDestination() { return this.hopsToDestination; }
 	public String getPathString() { return this.pathString; }
 	
-	private String buildPathString() {
+	private String buildPathString(List<String> hopsToDestination) {
 		StringBuilder path = new StringBuilder();
-		for(Iterator<String> pathItr = this.hopsToDestination.iterator(); pathItr.hasNext();) {
+		for(Iterator<String> pathItr = hopsToDestination.iterator(); pathItr.hasNext();) {
 			path.append(pathItr.next());
 			if(pathItr.hasNext()) {
 				path.append(" -> ");
