@@ -31,15 +31,14 @@ public class PathResponse {
 			throw new IllegalArgumentException("startingPage or destinationPage cannot be null");
 		}
 		if(hopsAlongDestination.isEmpty()) {
-			this.hopsToDestination = Collections.emptyList();
 			this.hopsCount = Integer.valueOf(-1);
 			this.pathString = "";
 		} else {
-			this.hopsToDestination = hopsAlongDestination;
-			this.pathString = buildPathString();
 			this.hopsCount = this.hopsToDestination.size() - 1;
+			this.pathString = buildPathString();
 
 		}
+		this.hopsToDestination = hopsAlongDestination;
 		this.startingPage = startingPage;
 		this.destinationPage = destinationPage;
 		this.foundOnDate = new Date();

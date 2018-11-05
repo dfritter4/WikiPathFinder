@@ -83,11 +83,11 @@ public class WikiPathFindingServiceImpl implements WikiPathFindingService {
 		
 		if(destinationPageName.equals(nextPageName)) {
 			return new PathResponse(startPageName, destinationPageName, new LinkedList<String>(pathSet));
-		} else {
-			//we might have reached a page that was deleted or has no valid links in the main body of the
-			//article, so we'll return a "no path exists" object
-			return new PathResponse(startPageName, destinationPageName);
-		}
+		} 
+		
+		//we might have reached a page that was deleted or has no valid links in the main body of the
+		//article, so we'll return a "no path exists" object
+		return new PathResponse(startPageName, destinationPageName);
 		
 	}
 	
